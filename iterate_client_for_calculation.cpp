@@ -20,6 +20,7 @@ int main()
 	SOCKET clnt_socket = socket(AF_INET, SOCK_STREAM, 0);
 
 	sockaddr_in addr;
+	memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(8000);
 	addr.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
@@ -36,7 +37,7 @@ int main()
 	send(clnt_socket, buf, strlen(buf) + 1,0);
 	for (int i = 0; i < count + 1; i++)
 	{
-		SOCKET clnt_socket = socket(AF_INET, SOCK_STREAM, 0);
+		clnt_socket = socket(AF_INET, SOCK_STREAM, 0);
 		if (connect(clnt_socket, (sockaddr*)&addr, sizeof(sockaddr)) == SOCKET_ERROR)
 		{
 			return -1;
@@ -72,7 +73,7 @@ int main()
 	
 	fflush(stdin);
 	getchar();
-
+	WSACleanup();
 
 	return 0;
 }

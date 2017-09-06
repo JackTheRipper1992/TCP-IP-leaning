@@ -39,6 +39,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	SOCKET serv_socket = socket(AF_INET, SOCK_STREAM, 0);
 
 	sockaddr_in addr;
+	memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(8000);
 	addr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
@@ -57,12 +58,13 @@ int _tmain(int argc, _TCHAR* argv[])
 		sockaddr_in clnt_addr;
 		int clnt_addr_size=sizeof(sockaddr);
 		SOCKET	clnt_socket = accept(serv_socket, (sockaddr*)&clnt_addr, &clnt_addr_size);
-		/*printf("The client connecting ,the IP: %s, the Port:%s\n",inet_ntoa(clnt_addr.sin_addr.S_un.S_addr),ntohs(clnt_addr.sin_port) );*/
+		printf("The client connecting ,the IP: %s, the Port:%s\n",inet_ntoa(clnt_addr.sin_addr.S_un.S_addr),ntohs(clnt_addr.sin_port) );
+		fflush(stdout);
 		char buf[1024];
 		memset(buf, 0, 1024);
 		recv(clnt_socket, buf, sizeof(buf), 0);
 		int count = atoi(buf);//得到数字，建立循环
-		int a[10];
+		int a[10] = {0};
 		closesocket(clnt_socket);
 		
 		for (int i = 0; i < count+1; i++)
@@ -95,6 +97,6 @@ int _tmain(int argc, _TCHAR* argv[])
 			
 		}
 	closesocket(serv_socket);
-
+	WSACleanup();
 	return 0;
 }
